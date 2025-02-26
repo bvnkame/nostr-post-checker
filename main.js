@@ -8,7 +8,7 @@ if(debug_extension_emulated){
 }
 const defaultset=function(){};
 defaultset.mypubkey="4c5d5379a066339c88f6e101e3edb1fbaee4ede3eea35ffc6f1c664b3a4383ee";
-defaultset.eid="note15zl6ruufd5hcj0xmhq9r8yczjy2xt278qzn97e9zuc3dg36lkufq4326xp";
+defaultset.eid="note1gk2tu8u45e96csaczm0gee9uj8ugetpdupfxtqmp3m0rr6d3j94srkc7ku";
 defaultset.relaylist=[// cf. https://docs.google.com/spreadsheets/d/16PPbdUiGhcgsSmZueio3CbjF95_11sKDgOGN0r9LBJ0/edit#gid=0
  // "ws://localhost:6969",
  // global relays (that are supported by more than 2 clients on 2023/8/6)
@@ -83,6 +83,7 @@ window.onload=function(){
     //auto start check
     startcheckrelays();
   }
+
   showform();
   showpv();
 }
@@ -112,6 +113,7 @@ const setaddr=function(url){
   prevurl=url;
 }
 let prevurl = "";
+
 const urlsp2form=function(urlsp){
   let isset = false;
   if(urlsp.has('hidepv')){
@@ -188,6 +190,7 @@ const showdebug = function(){
     e.map(x=>{x.style.display='none';});
   }
 }
+
 const startcheckrelays=function(){
   /* clear websockets */
   if(ws !==undefined && Array.isArray(ws)){
@@ -334,18 +337,24 @@ const startcheckrelays=function(){
         ws[r].uuid,
         eventFilter  
       ];
+
+
       sendstr = JSON.stringify(sendobj);
       ws[r].send(sendstr);
-      //print("sent '"+sendstr+"'\n");
+      print("sent '"+sendstr+"'\n");
+
+
       ws[r].status = "sent";
     };
   }
+
   preparetable();
   curms = 0;
   nextms = 200;
   setTimeout(checkmsg, nextms);
   timer=setInterval(checktime, nextms);
 }
+
 let timer;
 let timeout=60000;
 const checktime=function(){
@@ -546,11 +555,18 @@ const pvevent = function(e, ws){
     let str = "";
     pvtime.innerHTML = new Date(e.created_at*1000);
     if(e.content !== undefined) str += escape_html(e.content).replace(/\n/g,"<br>");
+    let images = str.match(/https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-]+/g);
+    if(images !== null){ 
+      console.log("Get images", images)
+      noteimage.src=images[0];
+      noteimage.style.display = "inline";
+    }
     pvnote.innerHTML = str;
   }
   //update profile
   if(e.pubkey !== undefined && ws.prof_search_state=="idle") search_prof(e, ws);
 }
+
 let pvproftime = 0;
 const search_prof = function(e, ws0){
   ws0.prof_search_state = "opening";
@@ -566,6 +582,8 @@ const search_prof = function(e, ws0){
       pvproftime = recv[2].created_at;
       if(recv[2].content !== undefined){
         let content = JSON.parse(recv[2].content);
+
+        console.log("Get profile", content)
         let name  = "";
         let dname = "";
         let pic   = "";

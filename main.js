@@ -559,7 +559,7 @@ const pvevent = function(e, ws){
     if(images !== null){ 
       console.log("Get images", images)
       noteimage.src=images[0];
-      noteimage.style.display = "inline";
+      // noteimage.style.display = "inline";
     }
     pvnote.innerHTML = str;
   }

@@ -96,10 +96,16 @@ address {
     overflow-y:scroll;
     border-width: 0.01rem;
     border-style: solid;
-    max-height: 7.2rem;
+    /* max-height: 7.2rem; */
     padding: 0 0.3rem;
     margin: 2px;
 }
+
+#noteimage {
+    width: 200px;
+    height: auto;
+}
+
 .imgicon {
     width :48px;
     height:48px;
